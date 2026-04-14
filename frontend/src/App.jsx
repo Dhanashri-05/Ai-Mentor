@@ -27,8 +27,7 @@ const RootRedirect = () => {
   const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   // Redirect to onboarding if profile is incomplete
- if (!user) return <LoadingSpinner />;
-return <Navigate to={user.isProfileComplete ? "/dashboard" : "/complete-profile"} replace />;
+  return <Navigate to={user?.isProfileComplete ? "/dashboard" : "/complete-profile"} replace />;
 };
 
 // Prevents authenticated users from accessing public-only pages like login/signup.
@@ -46,9 +45,6 @@ const App = () => {
         {/* Redirect from root */}
         <Route path="/" element={<RootRedirect />} />
 
-        {/* Complete Profile Route */}
-        <Route path="/complete-profile" element={<CompleteProfilePage />} />
-
         {/* Public routes that logged-in users should not see */}
         <Route element={<PublicRoutes />}>
           <Route path="/login" element={<LoginPage />} />
@@ -59,7 +55,8 @@ const App = () => {
 
         {/* Protected Routes with shared Header + Sidebar layout */}
         <Route element={<ProtectedRoute />}>
-        <Route path="/complete-profile" element={<CompleteProfilePage />} />
+          {/* Complete Profile Route */}
+          <Route path="/complete-profile" element={<CompleteProfilePage />} />
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/analytics" element={<Analytics />} />
