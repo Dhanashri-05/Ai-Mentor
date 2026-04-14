@@ -195,13 +195,16 @@ const CompleteProfilePage = () => {
 
       // Update auth context with the new user data (preserves token)
       updateUser({
-        ...data,
-        isProfileComplete: true,
-        token: token,
-      });
+  ...user,
+  ...data,
+  isProfileComplete: true,
+  token,
+});
+
 
       toast.success("Profile completed successfully! 🎉");
-      navigate("/dashboard", { replace: true });
+
+window.location.href = "/dashboard";
     } catch (error) {
       toast.error(error.message || "Something went wrong");
     } finally {
