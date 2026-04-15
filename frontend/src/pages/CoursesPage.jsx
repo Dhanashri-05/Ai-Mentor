@@ -17,6 +17,7 @@ const CoursesPage = () => {
   const [myCourses, setMyCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
 
   const [showEnrollPopup, setShowEnrollPopup] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -167,8 +168,11 @@ const CoursesPage = () => {
           </div>
 
           <div className="flex items-center justify-start gap-3">
-            <button
-              onClick={() => setActiveTab("my-courses")}
+           <button
+                  onClick={() => {
+                         setActiveTab("my-courses");
+                           setShowSearch(false);
+                    }}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${
                 activeTab === "my-courses"
                   ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
@@ -178,9 +182,11 @@ const CoursesPage = () => {
               <BookOpen className="w-4 h-4" />
               Enrolled Courses
             </button>
-            <button
-              onClick={() => setActiveTab("explore")}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${
+    <button
+onClick={() => {
+  setActiveTab("explore");
+  setShowSearch(true);
+}}          className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${
                 activeTab === "explore"
                   ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
                   : "bg-black/30 text-white hover:bg-black/40"
@@ -190,39 +196,29 @@ const CoursesPage = () => {
               {t("courses.explore")}
             </button>
 
-           
+         
           </div>
-          
         </div>
       </div>
+{/* SEARCH BAR BELOW BLUE SECTION */}
+{activeTab === "explore" && showSearch && (
+<div className="flex justify-center mt-6 mb-8">
+    <div className="flex items-center bg-black/30 backdrop-blur-md rounded-full px-5 py-3 w-[420px] border border-white/10">
 
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto space-y-10">
-{activeTab === "explore" && (
-  <div className="mb-8">
-    {/* Search Below Blue Section */}
-
-    <div className="relative max-w-md">
-      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 w-5 h-5 z-10" />
+<Search className="w-4 h-4 text-white mr-2" />
 
       <input
         type="text"
-        placeholder="Search courses..."
+        placeholder="Search courses or skills..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full pl-12 pr-4 py-3.5 
-        bg-gradient-to-r from-[#111827] to-[#1f2937]
-        border border-white/10
-        rounded-full
-        text-white placeholder-white/50
-        shadow-lg shadow-cyan-500/10
-        focus:ring-2 focus:ring-cyan-400
-        focus:border-cyan-400
-        outline-none transition-all duration-300"
+     className="flex-1 outline-none bg-transparent text-white placeholder:text-gray-300"
       />
     </div>
   </div>
 )}
+      <main className="flex-1 p-8">
+        <div className="max-w-7xl mx-auto space-y-10">
 
           {/* ================= MY COURSES ================= */}
           {activeTab === "my-courses" && (
@@ -293,6 +289,7 @@ const CoursesPage = () => {
                   </button>
                 </div>
               </div>
+             
 
               {/* Horizontal Scroll Row */}
               <div
@@ -303,8 +300,10 @@ const CoursesPage = () => {
                 <style>{`div::-webkit-scrollbar { display: none; }`}</style>
 
                 {filteredExploreCourses.length === 0 && (
-                  <p className="text-slate-500">{t("courses.no_courses")}</p>
-                )}
+  <p className="text-slate-500 text-lg font-medium">
+    No courses available
+  </p>
+)}
 
                 {filteredExploreCourses.map((course) => (
                   <div
