@@ -65,8 +65,7 @@ async function seedCourses() {
             cascade: true,
             restartIdentity: true,
         });
-
-
+        
         console.log("🧹 DB reset done\n");
 
         const coursesData = JSON.parse(fs.readFileSync(coursesPath, "utf8"));
