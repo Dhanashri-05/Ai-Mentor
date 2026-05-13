@@ -45,7 +45,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (location.state?.logoutSuccess) {
