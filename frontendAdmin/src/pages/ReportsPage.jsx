@@ -12,6 +12,8 @@ import {
   Phone,
   FileText,
   Trash2,
+  Filter,
+  ChevronDown,
 } from "lucide-react";
 import { callApi } from "../utils/api";
 
@@ -414,6 +416,8 @@ function ReportsPage() {
       setLoading(false);
     }
   };
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
 
   useEffect(() => {
     fetchReports();
@@ -456,6 +460,32 @@ function ReportsPage() {
     statusFilter === "all"
       ? reports
       : reports.filter((r) => r.status === statusFilter);
+const filteredReports = reports.filter((report) => {
+  const type = report.reportType?.toLowerCase() || "";
+  switch (activeFilter) {
+    case "certificate":
+      return type.includes("certificate");
+    case "bug":
+      return (
+        type.includes("bug") ||
+        type.includes("error")
+      );
+    case "course":
+      return type.includes("course");
+    case "payment":
+      return type.includes("payment");
+    case "others":
+      return (
+        !type.includes("certificate") &&
+        !type.includes("bug") &&
+        !type.includes("error") &&
+        !type.includes("course") &&
+        !type.includes("payment")
+      );
+    default:
+      return true;
+  }
+});
 
   if (loading)
     return (
@@ -518,6 +548,102 @@ function ReportsPage() {
                 Rejected: {rejectedCount}
               </span>
             </div>
+            <div className="relative">
+          <button
+           onClick={() => setShowFilterMenu((prev) => !prev)}
+           className="h-12 px-5 rounded-2xl border border-border bg-card flex items-center gap-3 text-sm font-black uppercase tracking-widest text-main hover:bg-canvas-alt transition-all shadow-lg"
+          >
+          <Filter className="w-4 h-4 text-teal-500" />
+           <span> Filter: {activeFilter} </span>
+           <ChevronDown
+          className={`w-4 h-4 transition-transform duration-200 ${
+           showFilterMenu ? "rotate-180" : ""
+        }`}
+          />
+         </button>
+      {showFilterMenu && (
+    <div className="absolute top-14 right-0 min-w-[240px] rounded-2xl border border-border bg-card shadow-2xl overflow-hidden z-[500] animate-in fade-in zoom-in-95 duration-200">
+      <button
+        onClick={() => {
+          setActiveFilter("all");
+          setShowFilterMenu(false);
+        }}
+        className={`w-full px-5 py-4 text-left text-sm font-bold transition-all ${
+          activeFilter === "all"
+            ? "bg-teal-500 text-white"
+            : "hover:bg-canvas-alt text-main"
+        }`}
+      >
+        All Reports
+      </button>
+      <button
+        onClick={() => {
+          setActiveFilter("certificate");
+          setShowFilterMenu(false);
+        }}
+        className={`w-full px-5 py-4 text-left text-sm font-bold transition-all ${
+          activeFilter === "certificate"
+            ? "bg-amber-500 text-white"
+            : "hover:bg-canvas-alt text-main"
+        }`}
+      >
+        Certificate
+      </button>
+      <button
+        onClick={() => {
+          setActiveFilter("bug");
+          setShowFilterMenu(false);
+        }}
+        className={`w-full px-5 py-4 text-left text-sm font-bold transition-all ${
+          activeFilter === "bug"
+            ? "bg-red-500 text-white"
+            : "hover:bg-canvas-alt text-main"
+        }`}
+      >
+        Bug / Error
+      </button>
+      <button
+        onClick={() => {
+          setActiveFilter("course");
+          setShowFilterMenu(false);
+        }}
+        className={`w-full px-5 py-4 text-left text-sm font-bold transition-all ${
+          activeFilter === "course"
+            ? "bg-blue-500 text-white"
+            : "hover:bg-canvas-alt text-main"
+        }`}
+      >
+        Course
+      </button>
+      <button
+        onClick={() => {
+          setActiveFilter("payment");
+          setShowFilterMenu(false);
+        }}
+        className={`w-full px-5 py-4 text-left text-sm font-bold transition-all ${
+          activeFilter === "payment"
+            ? "bg-green-500 text-white"
+            : "hover:bg-canvas-alt text-main"
+        }`}
+      >
+        Payment Issue
+      </button>
+      <button
+        onClick={() => {
+          setActiveFilter("others");
+          setShowFilterMenu(false);
+        }}
+        className={`w-full px-5 py-4 text-left text-sm font-bold transition-all ${
+          activeFilter === "others"
+            ? "bg-purple-500 text-white"
+            : "hover:bg-canvas-alt text-main"
+        }`}
+      >
+        Others
+      </button>
+    </div>
+  )}
+</div>
           </div>
         </div>
 
